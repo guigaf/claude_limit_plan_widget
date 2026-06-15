@@ -273,14 +273,12 @@ download sem inchar o histórico do git.
 
 ## Como iniciar junto com o Windows
 
-1. Pressione `Win + R`, digite `shell:startup` e tecle Enter.
-   Isso abre a pasta de inicialização do usuário.
-2. Crie um atalho para `dist\TokenWidget.exe` dentro dessa pasta
-   (clique direito no .exe, Enviar para, Área de trabalho, e depois
-   mova o atalho para a pasta de inicialização, ou cole o atalho direto lá).
-3. No próximo login, o widget abre sozinho.
+Clique com o botão direito no ícone do tray e selecione
+**Adicionar na inicialização do Windows**. O widget será aberto
+automaticamente no próximo login.
 
-Para remover da inicialização, apague o atalho dessa pasta.
+Quando essa opção está ativa, o item do menu muda para
+**Remover da inicialização do Windows**.
 
 ## Como integrar com o seu script que chama a API
 
@@ -348,6 +346,8 @@ A cotação USD para BRL é fixa, lida do campo `usd_brl` da config
   versão mais nova (ver "Versão e verificação de atualização").
 - **Abrir página do projeto** : abre o repositório no navegador para baixar
   a versão mais recente.
+- **Adicionar/Remover da inicialização do Windows** : controla se o widget
+  abre automaticamente no login do usuário.
 - **Sair** : encerra o app.
 
 ## Aviso e privacidade

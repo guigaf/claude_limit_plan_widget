@@ -61,6 +61,7 @@ import token_logger
 import updater
 import usage_api
 import version
+import windows_startup
 
 # Ordem de alternancia das fontes no menu do tray.
 FONTES = ["limites", "claude", "arquivo"]
@@ -859,6 +860,12 @@ class Aplicacao:
         )
         menu.addAction(acao_projeto)
 
+        self.acao_inicializacao = QAction("", menu)
+        self.acao_inicializacao.triggered.connect(self.alternar_inicializacao)
+        menu.addAction(self.acao_inicializacao)
+        menu.aboutToShow.connect(self._atualizar_rotulo_inicializacao)
+        self._atualizar_rotulo_inicializacao()
+
         menu.addSeparator()
 
         acao_sair = QAction("Sair", menu)
@@ -941,6 +948,40 @@ class Aplicacao:
         self.tray.setIcon(
             gerar_icone_numero("%d" % round(pct), _cor_por_pct(pct))
         )
+
+    def _atualizar_rotulo_inicializacao(self):
+        """Mostra a acao inversa ao estado atual da inicializacao automatica."""
+        if windows_startup.esta_ativada():
+            texto = "Remover da inicializacao do Windows"
+        else:
+            texto = "Adicionar na inicializacao do Windows"
+        self.acao_inicializacao.setText(texto)
+
+    def alternar_inicializacao(self):
+        """Adiciona ou remove o widget da inicializacao do usuario Windows."""
+        ativada = windows_startup.esta_ativada()
+        try:
+            if ativada:
+                windows_startup.desativar()
+                mensagem = "O widget nao iniciara mais junto com o Windows."
+            else:
+                windows_startup.ativar()
+                mensagem = "O widget iniciara automaticamente com o Windows."
+        except OSError as erro:
+            self.tray.showMessage(
+                "Nao foi possivel alterar a inicializacao",
+                str(erro),
+                QSystemTrayIcon.Warning,
+                5000,
+            )
+        else:
+            self.tray.showMessage(
+                "Inicializacao do Windows",
+                mensagem,
+                QSystemTrayIcon.Information,
+                5000,
+            )
+        self._atualizar_rotulo_inicializacao()
 
     def alternar_provedor(self):
         """Alterna entre os backends Claude e Codex."""
